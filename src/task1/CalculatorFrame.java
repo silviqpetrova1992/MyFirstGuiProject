@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/18/15.
  */
-public class CalculatorFrame {
+public class CalculatorFrame extends JFrame {
   private JFrame frame;
   private JTextField txtField;
   private double operand1 = 0;
@@ -20,7 +20,7 @@ public class CalculatorFrame {
     frame = new JFrame("Calculator!");
     txtField = new JTextField();
     frame.setVisible(true);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setLocationRelativeTo(null);
     frame.setSize(300, 300);
     addComponentsToPane();
@@ -33,7 +33,6 @@ public class CalculatorFrame {
   }
 
   private void addComponentsToPane() {
-
     JButton btn1 = new JButton("1");
     JButton btn2 = new JButton("2");
     JButton btn3 = new JButton("3");
@@ -115,77 +114,108 @@ public class CalculatorFrame {
     frame.getContentPane().add(panel);
 //____________________________//
     ///////Listeners///////
-    addAction(btn0, "0");
-    addAction(btn1, "1");
-    addAction(btn2, "2");
-    addAction(btn3, "3");
-    addAction(btn4, "4");
-    addAction(btn5, "5");
-    addAction(btn6, "6");
-    addAction(btn7, "7");
-    addAction(btn8, "8");
-    addAction(btn9, "9");
-    addAction(btnDot, ".");
+    addNonOperationAction(btn0, "0");
+    addNonOperationAction(btn1, "1");
+    addNonOperationAction(btn2, "2");
+    addNonOperationAction(btn3, "3");
+    addNonOperationAction(btn4, "4");
+    addNonOperationAction(btn5, "5");
+    addNonOperationAction(btn6, "6");
+    addNonOperationAction(btn7, "7");
+    addNonOperationAction(btn8, "8");
+    addNonOperationAction(btn9, "9");
+    addNonOperationAction(btnDot, ".");
+    //For the Clear button
     btnClear.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        String s=txtField.getText();
-        char lastChar=s.charAt(s.length()-1);
-        if(lastChar=='+'||lastChar=='-'||lastChar=='x'||lastChar=='/'){
-         action=' ';
+        String s = txtField.getText();
+        char lastChar = s.charAt(s.length() - 1);
+        if (lastChar == '+' || lastChar == '-' || lastChar == 'x' || lastChar == '/') {
+          action = ' ';
         }
-        txtField.setText(s.substring(0,s.length()-1));
+        txtField.setText(s.substring(0, s.length() - 1));
       }
     });
     //For the ClearAll button
     btnClearAll.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        operand1=0;
-        operand2=0;
-        action=' ';
-        result=0;
+ resetValues();
         txtField.setText("");
       }
     });
     //For the Plus button
-    btnPlus.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if(action==' '){
-        String s = txtField.getText();
-        txtField.setText(s + "+");
-        try {
-          operand1 = Double.parseDouble(s);
-          action = '+';
-        } catch (Exception ex) {
-          txtField.setText(ex.getMessage());
-        }
-      }
-      }
-    });
+   addOperationAction(btnPlus,'+');
+    //For the Minus button
+  addOperationAction(btnMinus,'-');
+    //For the Multiply button
+    addOperationAction(btnMultiply,'x');
+    //For The Devide button
+    addOperationAction(btnDevide,'/');
 
     //For the Equal button
     btnEqual.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        if(action!=' '){
-        String s = txtField.getText();
-        operand2 = Double.parseDouble(s.substring(s.indexOf('+') + 1, s.length()));
-        if (action == '+') {
-          result = operand1 + operand2;
+        if (action != ' ') {
+          String s = txtField.getText();
+          operand2 = Double.parseDouble(s.substring(s.lastIndexOf(action) + 1, s.length()));
+          if (action == '+') {
+            result = operand1 + operand2;
+          }
+          if(action=='-'){
+            result=operand1-operand2;
+          }
+          if(action=='x'){
+            result=operand1*operand2;
+          }
+          if(action=='/'){
+            if(operand2==0){
+              txtField.setText("Devision by zero!");
+              resetValues();
+              return;
+            }
+            result=operand1/operand2;
+          }
+          txtField.setText(String.valueOf(result));
+        resetValues();
         }
-        txtField.setText(String.valueOf(result));
-        operand1=0;
-        operand2=0;
-        action=' ';
-        result=0;
-      }
       }
     });
   }
+private void addOperationAction(JButton btn, final char c){
+  btn.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      String s = txtField.getText();
+      if (action == ' '&&s.length()!=0) {
 
-  private void addAction(JButton btn, final String value) {
+        txtField.setText(s + c);
+        try {
+          operand1 = Double.parseDouble(s);
+          action = c;
+        } catch (Exception ex) {
+          txtField.setText("Incorrect input");
+          resetValues();
+        }
+      }
+      if (action ==' '&&s.length()==0&&((c=='+')||(c=='-'))){
+        s = txtField.getText();
+        txtField.setText(s + c);
+      }
+    }
+  });
+}
+
+  private void resetValues() {
+    operand1 = 0;
+    operand2 = 0;
+    action = ' ';
+    result = 0;
+  }
+
+  private void addNonOperationAction(JButton btn, final String value) {
     btn.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
