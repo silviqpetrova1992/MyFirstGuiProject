@@ -125,8 +125,64 @@ public class CalculatorFrame {
     addAction(btn7, "7");
     addAction(btn8, "8");
     addAction(btn9, "9");
-    addAction(btnDot,".");
+    addAction(btnDot, ".");
+    btnClear.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String s=txtField.getText();
+        char lastChar=s.charAt(s.length()-1);
+        if(lastChar=='+'||lastChar=='-'||lastChar=='x'||lastChar=='/'){
+         action=' ';
+        }
+        txtField.setText(s.substring(0,s.length()-1));
+      }
+    });
+    //For the ClearAll button
+    btnClearAll.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        operand1=0;
+        operand2=0;
+        action=' ';
+        result=0;
+        txtField.setText("");
+      }
+    });
+    //For the Plus button
+    btnPlus.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if(action==' '){
+        String s = txtField.getText();
+        txtField.setText(s + "+");
+        try {
+          operand1 = Double.parseDouble(s);
+          action = '+';
+        } catch (Exception ex) {
+          txtField.setText(ex.getMessage());
+        }
+      }
+      }
+    });
 
+    //For the Equal button
+    btnEqual.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if(action!=' '){
+        String s = txtField.getText();
+        operand2 = Double.parseDouble(s.substring(s.indexOf('+') + 1, s.length()));
+        if (action == '+') {
+          result = operand1 + operand2;
+        }
+        txtField.setText(String.valueOf(result));
+        operand1=0;
+        operand2=0;
+        action=' ';
+        result=0;
+      }
+      }
+    });
   }
 
   private void addAction(JButton btn, final String value) {
