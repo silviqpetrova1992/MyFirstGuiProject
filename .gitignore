@@ -1,0 +1,5 @@
+**/.git
+**/out
+.idea/vcs.xml
+.idea/workspace.xml
+**/.clover
