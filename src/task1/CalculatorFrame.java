@@ -8,14 +8,22 @@ import java.awt.event.ActionListener;
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/18/15.
  */
-public class CalculatorFrame extends JFrame {
+public class CalculatorFrame extends JFrame implements ActionListener {
   private JFrame frame;
   private JTextField txtField;
-  private Calculator calculator;
-
+  private Calculator calculator=new Calculator();
+  private PositionedButton[] buttons = new PositionedButton[]{new PositionedButton(new JButton("0"), new Point(0, 4, 2, 1)),
+          new PositionedButton(new JButton("1"), new Point(0, 1, 1, 1)), new PositionedButton(new JButton("2"), new Point(1, 1, 1, 1)),
+          new PositionedButton(new JButton("3"), new Point(2, 1, 1, 1)), new PositionedButton(new JButton("4"), new Point(0, 2, 1, 1)),
+          new PositionedButton(new JButton("5"), new Point(1, 2, 1, 1)), new PositionedButton(new JButton("6"), new Point(2, 2, 1, 1)),
+          new PositionedButton(new JButton("7"), new Point(0, 3, 1, 1)), new PositionedButton(new JButton("8"), new Point(1, 3, 1, 1)),
+          new PositionedButton(new JButton("9"), new Point(2, 3, 1, 1)), new PositionedButton(new JButton("+"), new Point(3, 1, 1, 1)),
+          new PositionedButton(new JButton("CE"), new Point(4, 1, 1, 1)), new PositionedButton(new JButton("-"), new Point(3, 2, 1, 1)),
+          new PositionedButton(new JButton("C"), new Point(4, 2, 1, 1)), new PositionedButton(new JButton("/"), new Point(3, 3, 1, 1)),
+          new PositionedButton(new JButton("="), new Point(4, 3, 1, 2)), new PositionedButton(new JButton("x"), new Point(3, 4, 1, 1)),
+          new PositionedButton(new JButton("."), new Point(2, 4, 1, 1))};
 
   public void createAndShowGUI() {
-    calculator = new Calculator();
     frame = new JFrame("Calculator!");
     txtField = new JTextField();
     frame.setVisible(true);
@@ -25,32 +33,15 @@ public class CalculatorFrame extends JFrame {
     addComponentsToPane();
   }
 
-  private void add(JComponent name, int a, int b, GridBagConstraints gridBagConstraints, JPanel panel) {
+  private void add(JComponent name, int a, int b, int c, int d, GridBagConstraints gridBagConstraints, JPanel panel) {
     gridBagConstraints.gridx = a;
     gridBagConstraints.gridy = b;
+    gridBagConstraints.gridwidth = c;
+    gridBagConstraints.gridheight = d;
     panel.add(name, gridBagConstraints);
   }
 
   private void addComponentsToPane() {
-    JButton btn1 = new JButton("1");
-    JButton btn2 = new JButton("2");
-    JButton btn3 = new JButton("3");
-    JButton btn4 = new JButton("4");
-    JButton btn5 = new JButton("5");
-    JButton btn6 = new JButton("6");
-    JButton btn7 = new JButton("7");
-    JButton btn8 = new JButton("8");
-    JButton btn9 = new JButton("9");
-    JButton btn0 = new JButton("0");
-    JButton btnDot = new JButton(".");
-    JButton btnPlus = new JButton("+");
-    JButton btnMinus = new JButton("-");
-    JButton btnMultiply = new JButton("x");
-    JButton btnDevide = new JButton("/");
-    JButton btnClearAll = new JButton("CE");
-    JButton btnClear = new JButton("C");
-    JButton btnEqual = new JButton("=");
-
     JPanel panel = new JPanel();
     GridBagLayout gb1 = new GridBagLayout();
     panel.setLayout(gb1);
@@ -61,129 +52,60 @@ public class CalculatorFrame extends JFrame {
     gridBagConstraints.insets = new Insets(5, 5, 5, 5);
     gridBagConstraints.anchor = GridBagConstraints.CENTER;
     gridBagConstraints.fill = GridBagConstraints.BOTH;
+
 ///////First line/////////
     txtField.setFont(new Font("SansSerif", Font.BOLD, 20));
     txtField.setHorizontalAlignment(JTextField.RIGHT);
     txtField.setEditable(false);
     txtField.setBackground(Color.WHITE);
-    gridBagConstraints.gridwidth = 5;
-    add(txtField, 0, 0, gridBagConstraints, panel);
+    //  gridBagConstraints.gridwidth = 5;
+    add(txtField, 0, 0, 5, 1, gridBagConstraints, panel);
 ////Second line/////////
-    gridBagConstraints.gridwidth = 1;
-    add(btn1, 0, 1, gridBagConstraints, panel);
-
-    add(btn2, 1, 1, gridBagConstraints, panel);
-
-    add(btn3, 2, 1, gridBagConstraints, panel);
-
-    add(btnPlus, 3, 1, gridBagConstraints, panel);
-
-    add(btnClearAll, 4, 1, gridBagConstraints, panel);
-//////Third line//////
-    add(btn4, 0, 2, gridBagConstraints, panel);
-
-    add(btn5, 1, 2, gridBagConstraints, panel);
-
-    add(btn6, 2, 2, gridBagConstraints, panel);
-
-    add(btnMinus, 3, 2, gridBagConstraints, panel);
-
-    add(btnClear, 4, 2, gridBagConstraints, panel);
-
-//////Forth line//////
-    add(btn7, 0, 3, gridBagConstraints, panel);
-
-    add(btn8, 1, 3, gridBagConstraints, panel);
-
-    add(btn9, 2, 3, gridBagConstraints, panel);
-
-    add(btnDevide, 3, 3, gridBagConstraints, panel);
-
-    gridBagConstraints.gridheight = 2;
-    add(btnEqual, 4, 3, gridBagConstraints, panel);
-
-/////Fifth line////
-    gridBagConstraints.gridheight = 1;
-    add(btnMultiply, 3, 4, gridBagConstraints, panel);
-
-    add(btnDot, 2, 4, gridBagConstraints, panel);
-
-    gridBagConstraints.gridwidth = 2;
-    add(btn0, 0, 4, gridBagConstraints, panel);
+    for (int i = 0; i < buttons.length; i++) {
+      add(buttons[i].button, buttons[i].point.i, buttons[i].point.x, buttons[i].point.y, buttons[i].point.z, gridBagConstraints, panel);
+      buttons[i].button.addActionListener(this);
+    }
     frame.getContentPane().add(panel);
-//____________________________//
-    ///////Listeners///////
-    addNonOperationAction(btn0, "0");
-    addNonOperationAction(btn1, "1");
-    addNonOperationAction(btn2, "2");
-    addNonOperationAction(btn3, "3");
-    addNonOperationAction(btn4, "4");
-    addNonOperationAction(btn5, "5");
-    addNonOperationAction(btn6, "6");
-    addNonOperationAction(btn7, "7");
-    addNonOperationAction(btn8, "8");
-    addNonOperationAction(btn9, "9");
-    addDotAction(btnDot);
-    //For the Clear button
-    btnClear.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        calculator.onClearPressed();
-        txtField.setText(calculator.getText());
-      }
-    });
-    //For the ClearAll button
-    btnClearAll.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        calculator.onClearAllPressed();
-        txtField.setText(calculator.getText());
-      }
-    });
-    //For the Plus button
-    addOperationAction(btnPlus, '+');
-    //For the Minus button
-    addOperationAction(btnMinus, '-');
-    //For the Multiply button
-    addOperationAction(btnMultiply, 'x');
-    //For The Devide button
-    addOperationAction(btnDevide, '/');
-
-    //For the Equal button
-    btnEqual.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        calculator.onEqualPressed();
-        txtField.setText(calculator.getText());
-      }
-    });
   }
 
-  private void addDotAction(JButton btn) {
-    btn.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        txtField.setText(calculator.onDotPressed());
-      }
-    });
+
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    String source = ((JButton) e.getSource()).getText();
+    if (isDigit(source)) {
+      txtField.setText(calculator.onNumberPressed(source));
+    }
+    if (isOperation(source)) {
+      txtField.setText(calculator.onOperationPressed(source.charAt(0)));
+    }
+    if (source.equals("=")) {
+      txtField.setText((calculator.onEqualPressed()));
+    }
+    if (source.equals(".")) {
+      txtField.setText((calculator.onDotPressed()));
+    }
+    if (source.equals("C")) {
+      txtField.setText((calculator.onClearPressed()));
+    }
+    if (source.equals("CE")) {
+      txtField.setText((calculator.onClearAllPressed()));
+    }
   }
 
-  private void addOperationAction(JButton btn, final char c) {
-    btn.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        txtField.setText(calculator.onOperationPressed(c));
-      }
-    });
+  private boolean isOperation(String text) {
+    if (text.equals("+") || text.equals("-") || text.equals("x") || text.equals("/")) {
+      return true;
+    }
+    return false;
   }
 
-  private void addNonOperationAction(JButton btn, final String value) {
-    btn.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        txtField.setText(calculator.onNumberPressed(value));
-      }
-    });
+  private boolean isDigit(String text) {
+    if (text.equals("0") || text.equals("1") || text.equals("2") || text.equals("3") ||
+            text.equals("4") || text.equals("5") || text.equals("6") || text.equals("7") ||
+            text.equals("8") || text.equals("9")) {
+      return true;
+    }
+    return false;
   }
 
 }
