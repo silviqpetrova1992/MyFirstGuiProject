@@ -9,7 +9,8 @@ package examples;
   public class URLReader {
     public static void main(String[] args) throws Exception {
 
-      URL oracle = new URL("http://www.oracle.com/");
+      URL oracle = new URL("http://www.addic7ed.com/updated/1/95968/0");
+      System.out.println(oracle.openConnection().getInputStream().available());
       BufferedReader in = new BufferedReader(
               new InputStreamReader(oracle.openStream()));
 
