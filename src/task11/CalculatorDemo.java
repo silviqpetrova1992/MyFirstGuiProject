@@ -6,7 +6,7 @@ package task11;
 public class CalculatorDemo {
   public static void main(String[] args) {
 
-    Calculator calculator = new Calculator("15+14-15");
+    Calculator calculator = new Calculator("15.5+14*2-20-10");
     System.out.println(calculator.onEqualPressed());
   }
 }

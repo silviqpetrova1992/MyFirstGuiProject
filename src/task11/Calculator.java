@@ -27,30 +27,50 @@ public class Calculator {
     map.put("7", new NonOperation(stack, "7"));
     map.put("8", new NonOperation(stack, "8"));
     map.put("9", new NonOperation(stack, "9"));
+    map.put(" ",new NonOperation(stack," "));
+    map.put(".",new NonOperation(stack,"."));
     map.put("+", new Operation(stack, "1","+",map) {
       @Override
       public String doOperationAction(String operand1, String operand2) {
-        return String.valueOf(Integer.parseInt(operand1) + Integer.parseInt(operand2));
+        try{
+        return String.valueOf(Double.parseDouble(operand1) + Double.parseDouble(operand2));
+        }catch (Exception e){
+          throw new IllegalStateException("Incorrect input!");
+        }
       }
     });
     map.put("-", new Operation(stack, "1","-",map) {
       @Override
       public String doOperationAction(String operand1, String operand2) {
-        return String.valueOf(Integer.parseInt(operand1) - Integer.parseInt(operand2));
+        try{
+        return String.valueOf(Double.parseDouble(operand1) - Double.parseDouble(operand2));
+      }catch (Exception e){
+          throw new IllegalStateException("Incorrect input!");
+      }
       }
     });
     map.put("*", new Operation(stack, "2","*",map) {
       @Override
       public String doOperationAction(String operand1, String operand2) {
-        return String.valueOf(Integer.parseInt(operand1) * Integer.parseInt(operand2));
+        try{
+        return String.valueOf(Double.parseDouble(operand1) * Double.parseDouble(operand2));
+      }catch (Exception e){
+          throw new IllegalStateException("Incorrect input!");
+      }
       }
     });
   }
 
   public String onEqualPressed() {
     this.prepare();
-    task = this.convert();
+    task= this.convert();
+    try{
     return this.calculate();
+    }
+      catch(IllegalStateException ex){
+        System.err.println(ex.getMessage());
+        return null;
+      }
   }
 
   private String calculate() {
@@ -64,7 +84,7 @@ public class Calculator {
       }
       task = task.substring(1, task.length());
     }
-    if (stack.size() != 1) {
+    if (stack.size() != 2) {
       throw new IllegalArgumentException("Incorrect input");
     }
     return stack.pop();
@@ -72,12 +92,13 @@ public class Calculator {
 
   private String convert() {
     stack.clear();
-    String convertedTask = "";
+    String convertedTask = " ";
     while (task.length() != 0) {
    convertedTask=map.get(String.valueOf(task.charAt(0))).convert(convertedTask);
       task = task.substring(1, task.length());
     }
     while (!stack.empty()) {
+      convertedTask+=" ";
       convertedTask += stack.pop();
     }
     return convertedTask;
