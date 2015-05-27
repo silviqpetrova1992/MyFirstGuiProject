@@ -1,0 +1,24 @@
+  private String convert() {
+    stack.clear();
+    String convertedTask = "";
+    while (task.length() != 0) {
+      if (map.get(String.valueOf(task.charAt(0))) instanceof NonOperation) {
+        convertedTask += task.charAt(0);
+      }
+      if ((map.get(String.valueOf(task.charAt(0))) instanceof Operation)) {
+        while (!stack.empty() && (map.get(stack.peek()).getPriority().compareTo(map.get(String.valueOf(task.charAt(0))).getPriority()) >= 0)) {
+          convertedTask += stack.pop();
+        }
+        stack.push(String.valueOf(task.charAt(0)));
+      }
+      if()
+      task = task.substring(1, task.length());
+    }
+    while (!stack.empty()) {
+      convertedTask += stack.pop();
+    }
+    return convertedTask;
+  }
+
+  ;
+}

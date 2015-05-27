@@ -1,7 +1,6 @@
 package task1;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,14 +8,13 @@ import java.awt.event.ActionListener;
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/18/15.
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
-  private JFrame frame;
   private CalculatorPanel panel = new CalculatorPanel();
 
   private Calculator calculator = new Calculator();
 
 
   public void createAndShowGUI() {
-    frame = new JFrame("Calculator!");
+    JFrame frame = new JFrame("Calculator!");
     frame.setVisible(true);
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setLocationRelativeTo(null);
@@ -51,19 +49,13 @@ public class CalculatorFrame extends JFrame implements ActionListener {
     }
 
   private boolean isOperation(String text) {
-    if (text.equals("+") || text.equals("-") || text.equals("x") || text.equals("/")) {
-      return true;
-    }
-    return false;
+    return text.equals("+") || text.equals("-") || text.equals("x") || text.equals("/");
   }
 
   private boolean isDigit(String text) {
-    if (text.equals("0") || text.equals("1") || text.equals("2") || text.equals("3") ||
+    return text.equals("0") || text.equals("1") || text.equals("2") || text.equals("3") ||
             text.equals("4") || text.equals("5") || text.equals("6") || text.equals("7") ||
-            text.equals("8") || text.equals("9")) {
-      return true;
-    }
-    return false;
+            text.equals("8") || text.equals("9");
   }
 
 }

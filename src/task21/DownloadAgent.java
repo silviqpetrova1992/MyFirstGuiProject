@@ -14,8 +14,8 @@ public class DownloadAgent {
   public long length;
   public int percents=0;
 
-  public void download(String urlString, String out) throws Exception {
-    URL url = new URL(urlString);
+  public void download(URL url, String out) throws Exception {
+   // URL url = new URL(urlString);
     URLConnection connection = url.openConnection();
     System.out.println(connection.getContentLength() + "\\\\\\\\\\\\\\\\");
     length = connection.getContentLength();
@@ -24,13 +24,14 @@ public class DownloadAgent {
     FileOutputStream output = new FileOutputStream(out);
     int inputLine;
     while ((inputLine = in.read()) != -1) {
-      if(numberBytes/(length/100)>percents){
+      if((numberBytes*100/length)>percents){
         percents++;
       }
       output.write(inputLine);
       System.out.println("iztegleni  " + numberBytes+ "Procenti  "+percents);
       numberBytes++;
     }
+    percents=100;
     in.close();
   }
 }

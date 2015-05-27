@@ -2,6 +2,8 @@ package task21;
 
 import task2.DownloadAgent;
 
+import java.net.URL;
+
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/25/15.
  */
@@ -32,7 +34,8 @@ public class DownloadAgentThread extends Thread {
   public void run() {
     try {
       agent = new task21.DownloadAgent();
-      agent.download(urlString, out);
+      URL url=new URL(urlString);
+      agent.download(url, out);
     } catch (Exception e) {
       agent.length = -1;
       urlString = e.getMessage();

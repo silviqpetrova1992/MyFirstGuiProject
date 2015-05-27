@@ -65,6 +65,7 @@ public class DownloadAgentForm implements ActionListener, PropertyChangeListener
     panel.add(progressBar);
     panel.add(errorLabel);
     errorLabel.setForeground(Color.RED);
+    progressBar.setStringPainted(true);
     spring.putConstraint(SpringLayout.WEST, url, 45, SpringLayout.WEST, panel);
     spring.putConstraint(SpringLayout.NORTH, url, 5, SpringLayout.NORTH, panel);
     spring.putConstraint(SpringLayout.WEST, urlField, 5, SpringLayout.EAST, url);
