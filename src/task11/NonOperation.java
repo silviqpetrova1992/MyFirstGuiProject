@@ -7,17 +7,17 @@ import java.util.Stack;
  */
 public class NonOperation implements Symbol {
   public Stack<String> stack;
-  public String priority;
+  public int priority;
   private String value;
 
   protected NonOperation(Stack<String> stack,String value) {
     this.stack = stack;
-    this.priority="number";
+    this.priority=-1;
     this.value=value;
   }
 
   @Override
-  public String getPriority() {
+  public int getPriority() {
     return priority;
   }
 

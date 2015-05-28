@@ -8,18 +8,18 @@ import java.util.Stack;
  */
 public abstract class Operation implements Symbol {
   public Stack<String> stack;
-  public String priority;
+  public int priority;
   public Map<String, Symbol> map;
   private String value;
 
-  protected Operation(Stack<String> stack, String priority, String value, Map<String, Symbol> map) {
+  protected Operation(Stack<String> stack, int priority, String value, Map<String, Symbol> map) {
     this.stack = stack;
     this.priority = priority;
     this.value = value;
     this.map = map;
   }
 
-  public String getPriority() {
+  public int getPriority() {
     return priority;
   }
 
@@ -53,7 +53,7 @@ public abstract class Operation implements Symbol {
   }
 
   public String convert(String task) {
-    while (!stack.empty() && (this.priority.compareTo(map.get(stack.peek()).getPriority()) <= 0)) {
+    while (!stack.empty() && (this.priority<=(map.get(stack.peek()).getPriority()))) {
       task += " ";
       task += stack.pop();
     }

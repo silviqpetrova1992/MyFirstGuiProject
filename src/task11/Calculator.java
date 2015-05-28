@@ -12,8 +12,7 @@ public class Calculator {
   Stack<String> stack = new Stack<String>();
   Map<String, Symbol> map = new HashMap<String, Symbol>();
 
-  public Calculator(String task) {
-    this.task = task;
+  public Calculator() {
   }
 
   private void prepare() {
@@ -29,7 +28,8 @@ public class Calculator {
     map.put("9", new NonOperation(stack, "9"));
     map.put(" ",new NonOperation(stack," "));
     map.put(".",new NonOperation(stack,"."));
-    map.put("+", new Operation(stack, "1","+",map) {
+    map.put("E",new NonOperation(stack,"E"));
+    map.put("+", new Operation(stack, 1,"+",map) {
       @Override
       public String doOperationAction(String operand1, String operand2) {
         try{
@@ -39,7 +39,7 @@ public class Calculator {
         }
       }
     });
-    map.put("-", new Operation(stack, "1","-",map) {
+    map.put("-", new Operation(stack, 1,"-",map) {
       @Override
       public String doOperationAction(String operand1, String operand2) {
         try{
@@ -49,9 +49,10 @@ public class Calculator {
       }
       }
     });
-    map.put("*", new Operation(stack, "2","*",map) {
+    map.put("*", new Operation(stack, 2,"*",map) {
       @Override
       public String doOperationAction(String operand1, String operand2) {
+
         try{
         return String.valueOf(Double.parseDouble(operand1) * Double.parseDouble(operand2));
       }catch (Exception e){
@@ -59,17 +60,31 @@ public class Calculator {
       }
       }
     });
+    map.put("/",new Operation(stack, 2,"/",map) {
+      @Override
+      public String doOperationAction(String operand1, String operand2) {
+        if(operand2.equals("0")){
+          throw new IllegalStateException("Devision by zero!");
+        }
+        try{
+          return String.valueOf(Double.parseDouble(operand1) / Double.parseDouble(operand2));
+        }catch (Exception e){
+          throw new IllegalStateException("Incorrect input!");
+        }
+      }
+    });
   }
 
-  public String onEqualPressed() {
+  public String onEqualPressed(String task) {
+    this.task=task;
     this.prepare();
-    task= this.convert();
+    this.task= this.convert();
     try{
     return this.calculate();
     }
-      catch(IllegalStateException ex){
-        System.err.println(ex.getMessage());
-        return null;
+      catch(Exception ex){
+       // System.err.println(ex.getMessage());
+        return ex.getMessage();
       }
   }
 
