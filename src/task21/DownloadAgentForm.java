@@ -1,37 +1,26 @@
 package task21;
 
-import task2.DownloadAgentThread;
-import task2.Task;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+
 
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/22/15.
  */
-public class DownloadAgentForm implements ActionListener, PropertyChangeListener {
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        DownloadAgentForm agent = new DownloadAgentForm();
-        agent.createAndShowGUI();
-      }
-    });
-  }
+public class DownloadAgentForm implements ActionListener, ProgressChangeListener {
+
 
   JLabel url = new JLabel("URL:");
   JTextField urlField = new JTextField(20);
   JLabel fileName = new JLabel("File name:");
-  JLabel errorLabel=new JLabel("");
+  JLabel errorLabel = new JLabel("");
   JTextField fileNameField = new JTextField(20);
   protected JButton submit = new JButton("Submit!");
   JProgressBar progressBar = new JProgressBar(0, 100);
   JPanel panel;
-  task21.Task task;
 
   public void createAndShowGUI() {
     JFrame frame = new JFrame("DownloadAgent1");
@@ -79,8 +68,8 @@ public class DownloadAgentForm implements ActionListener, PropertyChangeListener
     spring.putConstraint(SpringLayout.NORTH, fileNameField, 5, SpringLayout.SOUTH, urlField);
     spring.putConstraint(SpringLayout.WEST, progressBar, 100, SpringLayout.WEST, panel);
     spring.putConstraint(SpringLayout.NORTH, progressBar, 20, SpringLayout.SOUTH, fileName);
-    spring.putConstraint(SpringLayout.WEST,errorLabel,80,SpringLayout.WEST,panel);
-    spring.putConstraint(SpringLayout.NORTH,errorLabel,5,SpringLayout.SOUTH,progressBar);
+    spring.putConstraint(SpringLayout.WEST, errorLabel, 80, SpringLayout.WEST, panel);
+    spring.putConstraint(SpringLayout.NORTH, errorLabel, 5, SpringLayout.SOUTH, progressBar);
   }
 
   @Override
@@ -89,22 +78,16 @@ public class DownloadAgentForm implements ActionListener, PropertyChangeListener
     System.out.println("Action");
     submit.setEnabled(false);
     panel.setCursor((Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)));
-    task21.DownloadAgentThread agentThread=new task21.DownloadAgentThread(this.urlField.getText(), this.fileNameField.getText());
-    task = new task21.Task(this,agentThread);
-    task.addPropertyChangeListener(this);
-    agentThread.start();
-    task.execute();
-
+    DownloadAgentThread agent = new DownloadAgentThread(this.urlField.getText(), this.fileNameField.getText(), this);
+    agent.start();
   }
 
   @Override
-  public void propertyChange(PropertyChangeEvent evt) {
-    System.out.println("aaaaa");
-    if ("progress" == evt.getPropertyName()) {
-      int progress = (Integer) evt.getNewValue();
-      progressBar.setValue(progress);
-      //taskOutput.append(String.format(
-      //       "Completed %d%% of task.\n", task.getProgress()));
+  public void onProgressUpdated(int progress) {
+    progressBar.setValue(progress);
+    if (progress == 100) {
+      submit.setEnabled(true);
+      panel.setCursor(Cursor.getDefaultCursor());
     }
   }
 }

@@ -7,6 +7,6 @@ public class CalculatorDemo {
   public static void main(String[] args) {
 
     Calculator calculator = new Calculator();
-    System.out.println(calculator.onEqualPressed("15.5+14*2-20"));
+    System.out.println(calculator.onEqualPressed("66+6/0"));
   }
 }

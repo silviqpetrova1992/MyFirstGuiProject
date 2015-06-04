@@ -1,7 +1,6 @@
 package task11;
 
-import task1.Calculator;
-import task1.CalculatorPanel;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,9 +10,9 @@ import java.awt.event.ActionListener;
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/18/15.
  */
 public class CalculatorFrame extends JFrame implements ActionListener {
-  private task11.CalculatorPanel panel = new task11.CalculatorPanel();
+  private CalculatorPanel panel = new CalculatorPanel();
 
-  private task11.Calculator calculator = new task11.Calculator();
+  private Calculator calculator = new Calculator();
 
 
   public void createAndShowGUI() {

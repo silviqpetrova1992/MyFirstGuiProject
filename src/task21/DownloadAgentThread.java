@@ -1,6 +1,5 @@
 package task21;
 
-import task2.DownloadAgent;
 
 import java.net.URL;
 
@@ -11,19 +10,13 @@ public class DownloadAgentThread extends Thread {
 
   private String urlString;
   private String out;
+  private final ProgressChangeListener listener;
   private task21.DownloadAgent agent;
 
-  public DownloadAgentThread(String urlString, String out) {
+  public DownloadAgentThread(String urlString, String out, ProgressChangeListener listener) {
     this.urlString = urlString;
     this.out = out;
-  }
-
-  public long length() {
-    return agent.length;
-  }
-
-  public long numberOfBytes() {
-    return agent.numberBytes;
+    this.listener = listener;
   }
 
   public String getURLString() {
@@ -33,16 +26,17 @@ public class DownloadAgentThread extends Thread {
   @Override
   public void run() {
     try {
-      agent = new task21.DownloadAgent();
-      URL url=new URL(urlString);
+      agent = new task21.DownloadAgent(listener);
+      URL url = new URL(urlString);
       agent.download(url, out);
     } catch (Exception e) {
-      agent.length = -1;
+      // agent.length = -1;
       urlString = e.getMessage();
     }
   }
 
   public int getPercents() {
-    return agent.percents;
+    //return agent.percents;
+    return 0;
   }
 }

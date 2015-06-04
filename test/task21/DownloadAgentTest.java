@@ -11,36 +11,28 @@ import static org.junit.Assert.assertThat;
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/26/15.
  */
 public class DownloadAgentTest {
+  private int[] process = new int[100];
+  class Progress implements ProgressChangeListener{
+
+    private int i=0;
+    @Override
+    public void onProgressUpdated(int progress) {
+      process[i]=progress;
+      i++;
+    }
+  }
   @Test
   public void happyPath() {
-    final DownloadAgent agent = new DownloadAgent();
-    final int[] process = new int[101];
-    Thread counter = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        int i = 0;
-        int procent;
-        while (i < 100) {
-         System.out.println(agent.percents+"---"+i);
-          procent=agent.percents;
-          if (procent > i) {
-            System.out.println("zapisvame "+procent);
-            process[procent] = procent;
-            i =procent;
-          }
-        }
-      }
-    });
-    counter.setPriority(Thread.MAX_PRIORITY);
-    counter.start();
+    final DownloadAgent agent = new DownloadAgent(new Progress());
+
     try {
       agent.download(DownloadAgentTest.class.getResource("/SomeTextFile.txt"), "azsisi1.txt");
     } catch (Exception e) {
       e.printStackTrace();
     }
     for (int i=0;i<process.length;i++) {
-    //  System.out.println(process[i]+"iiiii "+i);
-      assertThat(process[i],is(i));
+   //  System.out.println(process[i]+"iiiii "+i);
+      assertThat(process[i],is(i+1));
     }
       assertThat(new File("azsisi1.txt").length(),is(new File("txt/SomeTextFile.txt").length()));
 
