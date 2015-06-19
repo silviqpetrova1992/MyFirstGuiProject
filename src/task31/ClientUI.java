@@ -5,22 +5,15 @@ import javax.swing.*;
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/28/15.
  */
-public class ClientForm implements ProgressListener {
+public class ClientUI implements ClientDisplay {
   private JFrame frame;
   private JPanel panel;
   public JTextArea field;
 private CustomClient client=new CustomClient("localhost",1430,this);
 
-  public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        ClientForm clientForm = new ClientForm();
-        clientForm.createAndShowGUI();
-      }
-    });
-  }
 
-  private void createAndShowGUI() {
+
+  public void createAndShowGUI() {
     this.frame = new JFrame("Client");
     this.panel = new JPanel();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,7 +41,27 @@ panel.setLayout(spring);
   }
 
   @Override
-  public void onMessageChanged(String message) {
-    field.append(message+ "\n");
+  public void clientWasStarted() {
+    field.append("Starting the client...\n");
+  }
+
+  @Override
+  public void clientWasConnected() {
+    field.append("Conected to the server.\n");
+  }
+
+  @Override
+  public void displayMessage(String message) {
+    field.append("Readed message is:"+message+"\n");
+  }
+
+  @Override
+  public void displayHostError() {
+    field.append( "Don't know about host!\n");
+  }
+
+  @Override
+  public void displayIOError() {
+    field.append("Couldn't get I/O for the connection!\n");
   }
 }

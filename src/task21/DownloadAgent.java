@@ -21,7 +21,6 @@ public class DownloadAgent {
 
   public void download(URL url, String out) throws Exception {
     URLConnection connection = url.openConnection();
-    System.out.println(connection.getContentLength() + "\\\\\\\\\\\\\\\\");
     int length = connection.getContentLength();
     InputStream in = new BufferedInputStream(
             connection.getInputStream());
@@ -33,14 +32,12 @@ public class DownloadAgent {
 
       output.write(inputLine);
       numberBytes++;
-      System.out.println("iztegleni  " + numberBytes+ "Procenti  "+percents);
       if((numberBytes*100/length)>percents){
         percents++;
         listener.onProgressUpdated(percents);
       }
-     // listener.onProgressUpdated(percents);
     }
-
+listener.onDownloadCompleted();
     in.close();
   }
 }

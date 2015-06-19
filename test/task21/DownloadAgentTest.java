@@ -2,6 +2,7 @@ package task21;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import static org.hamcrest.core.Is.is;
@@ -20,6 +21,11 @@ public class DownloadAgentTest {
       process[i]=progress;
       i++;
     }
+
+    @Override
+    public void onDownloadCompleted() {
+
+    }
   }
   @Test
   public void happyPath() {
@@ -37,4 +43,6 @@ public class DownloadAgentTest {
       assertThat(new File("azsisi1.txt").length(),is(new File("txt/SomeTextFile.txt").length()));
 
   }
+
+
 }

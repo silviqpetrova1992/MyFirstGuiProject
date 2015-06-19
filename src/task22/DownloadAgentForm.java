@@ -1,4 +1,4 @@
-package task21;
+package task22;
 
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
  */
 public class DownloadAgentForm implements ActionListener, ProgressChangeListener {
 
-
+  DownloadAgentThread agent;
   JLabel url = new JLabel("URL:");
   JTextField urlField = new JTextField(20);
   JLabel fileName = new JLabel("File name:");
@@ -74,17 +74,31 @@ public class DownloadAgentForm implements ActionListener, ProgressChangeListener
 
   @Override
   public void actionPerformed(ActionEvent e) {
+    progressBar.setValue(0);
     errorLabel.setText("");
     System.out.println("Action");
-    submit.setEnabled(false);
-    panel.setCursor((Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)));
-    DownloadAgentThread agent = new DownloadAgentThread(this.urlField.getText(), this.fileNameField.getText(), this);
+    agent = new DownloadAgentThread(this.urlField.getText(), this.fileNameField.getText(), this);
     agent.start();
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e1) {
+      e1.printStackTrace();
+    }
+    if (agent.existError()) {
+      errorLabel.setText(agent.getURLString());
+      return;
+    }
   }
 
   @Override
   public void onProgressUpdated(int progress) {
     progressBar.setValue(progress);
+  }
+
+  @Override
+  public void onDownloadStarted() {
+    submit.setEnabled(false);
+    panel.setCursor((Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)));
   }
 
   @Override

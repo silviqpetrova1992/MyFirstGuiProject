@@ -4,59 +4,55 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/28/15.
  */
-public class CustomServer {
+public class CustomServer implements Service{
   private int portNumber;
-  public String message;
-private ProgressListener listener;
+  private String message;
+  private ServerDisplay listener;
+  private final Clock clock;
+  private ServerSocket serverSocket;
 
-  public CustomServer(int portNumber, ProgressListener listener) {
+  public CustomServer(int portNumber, ServerDisplay listener, Clock clock) {
     this.portNumber = portNumber;
     this.listener = listener;
-    message = "";
+    this.clock = clock;
   }
 
   public void start() {
-    listener.onMessageChanged("The server is started");
+    listener.serverWasStarted();
     try {
-      ServerSocket serverSocket =
+      serverSocket =
               new ServerSocket(portNumber);
-      listener.onMessageChanged("Waiting for a client...");
-
-/*    BufferedReader in = new BufferedReader(
-            new InputStreamReader(clientSocket.getInputStream()));*/
-
-      while (message!="STOP") {
+      listener.waitingClient();
+      while (!serverSocket.isClosed()) {
         Socket clientSocket = serverSocket.accept();
-        listener.onMessageChanged("Accepted a client.");
+        listener.acceptedClient();
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
-        String output = "Hello! " + getDate();
-        listener.onMessageChanged(output);
+       //DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        //String output = dateFormat.format(getDate());
+        String output= clock.now().toString();
+        listener.displaySendedMessage(output);
         out.println(output);
       }
-      listener.onMessageChanged("Closing the server...");
-      serverSocket.close();
+
     } catch (IOException e) {
-      System.out.println("Exception caught when trying to listen on port "
-              + portNumber + " or listening for a connection");
-      listener.onMessageChanged("Exception caught when trying to listen on port or listening for a connection");
-      System.out.println(e.getMessage());
+      listener.displayIOError();
     }
+
   }
-public  String getDate(){
-  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-  Date date = new Date();
-  return dateFormat.format(date);
-}
-  public static void main(String[] args) {
-    CustomServer customServer = new CustomServer(1430, null);
-    customServer.start();
+
+  public void stop() throws IOException {
+    listener.serverWasStoped();
+    serverSocket.close();
   }
+
+/*
+  protected Clock getDate() {
+    return new Clock();
+  }
+*/
 }

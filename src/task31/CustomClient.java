@@ -9,13 +9,16 @@ import java.net.UnknownHostException;
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/28/15.
  */
-public class CustomClient {
+public class CustomClient implements CustomClientIntf {
   private int portNumber;
   private String hostName;
-private ProgressListener listener;
-  public String receivedMessage;
+  private String receivedMessage;
+  private ClientDisplay listener;
 
-  public CustomClient(String hostName, int portNumber, ProgressListener listener) {
+  Socket socket = null;
+
+
+  public CustomClient(String hostName, int portNumber, ClientDisplay listener) {
     this.hostName = hostName;
     this.portNumber = portNumber;
     this.listener = listener;
@@ -23,36 +26,33 @@ private ProgressListener listener;
 
   public void start() {
     try {
-      listener.onMessageChanged("Starting the client...");
-      Socket echoSocket = new Socket(hostName, portNumber);
-      listener.onMessageChanged("Conected to the server.");
-     /* PrintWriter out =
-              new PrintWriter(echoSocket.getOutputStream(), true);*/
-      BufferedReader in =
-              new BufferedReader(
-                      new InputStreamReader(echoSocket.getInputStream()));
-      listener.onMessageChanged("Reading message from the server.");
-      receivedMessage = in.readLine();
-      System.out.println("echo: " + receivedMessage);
-      listener.onMessageChanged("The read message is: " + receivedMessage);
-      echoSocket.close();
-      // }
+      listener.clientWasStarted();
+      conect(hostName, portNumber);
+      listener.clientWasConnected();
+
+
+      operateWithMessage();
+
+
+      listener.displayMessage(receivedMessage);
+      socket.close();
     } catch (UnknownHostException e) {
-      System.err.println("Don't know about host " + hostName);
-      listener.onMessageChanged("Don't know about host!");
-      // System.exit(1);
+      listener.displayHostError();
     } catch (IOException e) {
-      System.err.println("Couldn't get I/O for the connection to " +
-              hostName);
-     listener.onMessageChanged("Couldn't get I/O for the connection!");
-      //System.exit(1);
+      listener.displayIOError();
     }
   }
 
-
-  public static void main(String[] args) {
-    CustomClient customClient = new CustomClient("localhost", 1430, null);
-    customClient.start();
-
+  public boolean conect(String hostName, int port) throws IOException {
+    socket = new Socket(hostName, portNumber);
+    return true;
   }
+
+  public String operateWithMessage() throws IOException {
+    BufferedReader in =
+            new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+    return receivedMessage = in.readLine();
+  }
+
 }

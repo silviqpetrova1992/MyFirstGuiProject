@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by Silvia Petrova(silviqpetrova1992@gmail.com)on 5/28/15.
  */
-public class ServerUI implements ProgressListener {
+public class ServerUI implements ServerDisplay, Clock {
   private JFrame frame;
   private JPanel panel;
   //private JTextField field;
@@ -54,8 +54,39 @@ public class ServerUI implements ProgressListener {
 
   }
 
+
   @Override
-  public void onMessageChanged(String message) {
-    field.append(message+ "\n");
+  public void serverWasStarted() {
+    field.append("The server is started\n");
+  }
+
+  @Override
+  public void waitingClient() {
+    field.append("Waiting for a client...\n");
+  }
+
+  @Override
+  public void acceptedClient() {
+    field.append("Accepted a client.\n");
+  }
+
+  @Override
+  public void displaySendedMessage(String message) {
+    field.append(message+"\n");
+  }
+
+  @Override
+  public void serverWasStoped() {
+    field.append("Closing the server...\n");
+  }
+
+  @Override
+  public void displayIOError() {
+    field.append("Don't know about host!\n");
+  }
+
+  @Override
+  public java.util.Date now() {
+    return new java.util.Date();
   }
 }

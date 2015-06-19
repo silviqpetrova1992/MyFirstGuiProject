@@ -24,36 +24,30 @@ public abstract class Operation implements Symbol {
   }
 
   public void doSomeJob() {
-    String operand1="";
-    String operand2="";
-  /*  if (stack.size() < 2) {
-      throw new IllegalArgumentException("Incorrect input!");
-    }*/
-    int i=0;
-    while(i<3&&!stack.empty()){
-      String s=stack.pop();
-      if(s.equals(" ")){
+    String operand1 = "";
+    String operand2 = "";
+    int i = 0;
+    while (i < 3 && !stack.empty()) {
+      String s = stack.pop();
+      if (s.equals(" ")) {
         i++;
-      }
-      else{
-        if(i==1){
-          operand2=s+operand2;
+      } else {
+        if (i == 1) {
+          operand2 = s + operand2;
         }
-        if(i==2){
-          operand1=s+operand1;
+        if (i == 2) {
+          operand1 = s + operand1;
         }
 
       }
     }
-   // operand2 = stack.pop();
-  //  operand1 = stack.pop();
     stack.push(" ");
     stack.push(doOperationAction(operand1, operand2));
 
   }
 
   public String convert(String task) {
-    while (!stack.empty() && (this.priority<=(map.get(stack.peek()).getPriority()))) {
+    while (!stack.empty() && (this.priority <= (map.get(stack.peek()).getPriority()))) {
       task += " ";
       task += stack.pop();
     }
